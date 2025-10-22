@@ -12,26 +12,47 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 자동차 경주 로직이 담긴 클래스
+ * 자동차 경주 로직을 담당하는 클래스
  */
 public class CarRacingService {
 
+    /**
+     * 레이스를 처리한다.
+     * @param requestDto - 자동차 정보와 라운드 수가 담긴 DTO
+     * @return 라운드별 과정과 최종 우승자가 담긴 DTO
+     */
     public CarRacingResponseDto start(CarRacingRequestDto requestDto) {
 
         // Car 도메인 객체로 변환
-        List<Car> cars = requestDto.carNameList().stream()
+        List<Car> cars = convertToDomain(requestDto.carNameList());
+
+        // 각 자동차의 현재 위치를 담을 Map 초기화
+        Map<String, Integer> carPositions = initCarPositionMap(cars);
+
+        // 레이스 시작
+        List<CarRacingResponseDto.RacingRecord> racingRecords = startRace(requestDto.roundCount(), cars, carPositions);
+
+        // 레이스 결과 정산
+        List<String> winners = processRaceResult(racingRecords);
+
+        return new CarRacingResponseDto(racingRecords, winners);
+    }
+
+    private static List<Car> convertToDomain(List<String> carNameList) {
+        return carNameList.stream()
                 .map(CarDomainMapper::toDomain)
                 .toList();
+    }
 
-        int roundCount = requestDto.roundCount();
-
-        // 각 차의 현재 위치를 담을 Map 초기화
+    private static Map<String, Integer> initCarPositionMap(List<Car> cars) {
         Map<String, Integer> carPositions = new HashMap<>(cars.size());
         for (Car car : cars) {
             carPositions.put(car.getName(), 0); // 현재 위치를 0으로 초기화
         }
+        return carPositions;
+    }
 
-        // 레이스 시작
+    private static List<CarRacingResponseDto.RacingRecord> startRace(int roundCount, List<Car> cars, Map<String, Integer> carPositions) {
         List<CarRacingResponseDto.RacingRecord> racingRecords = new ArrayList<>();
         for (int curRound = 1; curRound <= roundCount; curRound++) {
             // 각 차에 대한 이동여부 결정
@@ -47,8 +68,11 @@ public class CarRacingService {
             HashMap<String, Integer> curRoundResult = new HashMap<>(carPositions);
             racingRecords.add(new CarRacingResponseDto.RacingRecord(curRoundResult));
         }
+        return racingRecords;
+    }
 
-        // 레이스 결과 정산
+    private static List<String> processRaceResult(List<CarRacingResponseDto.RacingRecord> racingRecords) {
+
         Map<String, Integer> raceResult = racingRecords.getLast().carPositions();
 
         // 가장 큰 position(우승 거리)를 구함
@@ -58,12 +82,10 @@ public class CarRacingService {
                 .orElse(0); // 비어 있을 경우 기본값
 
         // 해당 우승거리와 같은 차를 뽑아냄
-        List<String> winners = raceResult.entrySet().stream()
+        return raceResult.entrySet().stream()
                 .filter(entry -> entry.getValue() == maxPosition)
                 .map(Map.Entry::getKey)
                 .toList();
-
-
-        return new CarRacingResponseDto(racingRecords, winners);
     }
+
 }
