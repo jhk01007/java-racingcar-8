@@ -40,7 +40,7 @@ public class CarRacingMapper {
     }
 
     public static String toRawWinner(List<String> winners) {
-        return "";
+        return String.join(", ", winners);
     }
 
     private static String[] mapCarNameList(String carNameList) {
@@ -48,7 +48,7 @@ public class CarRacingMapper {
     }
 
     private static int mapRoundCount(String raceCount) {
-        int mappedRoundCount = 0;
+        int mappedRoundCount;
         try {
             mappedRoundCount = Integer.parseInt(raceCount);
         } catch (NumberFormatException e) {

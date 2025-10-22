@@ -8,7 +8,6 @@ import racingcar.dto.CarRacingResponseDto;
 
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -91,6 +90,19 @@ class CarRacingMapperTest {
             map.put((String) kvs[i], (Integer) kvs[i + 1]);
         }
         return map;
+    }
+
+    @Test
+    @DisplayName("리스트 형태의 우승자 목록을 콤마를 기준으로 문자열 형태로 변환한다.")
+    public void toRawWinner() throws Exception {
+        // given
+        List<String> winners = List.of("b", "c");
+
+        // when
+        String rawWinner = CarRacingMapper.toRawWinner(winners);
+
+        // then
+        assertThat(rawWinner).isEqualTo("b, c");
     }
 
 }
