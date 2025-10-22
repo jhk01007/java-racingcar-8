@@ -2,6 +2,6 @@ package racingcar.view;
 
 public interface OutputView {
 
-    void writeResultByRound(String result);
-    void writeFinalWinner(String winner);
+    void writeRaceRecord(String result);
+    void writeWinner(String winner);
 }
