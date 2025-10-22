@@ -3,6 +3,8 @@ package racingcar.service;
 import camp.nextstep.edu.missionutils.Randoms;
 import racingcar.dto.CarRacingRequestDto;
 import racingcar.dto.CarRacingResponseDto;
+import racingcar.mapper.CarDomainMapper;
+import racingcar.model.Car;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,24 +18,28 @@ public class CarRacingService {
 
     public CarRacingResponseDto start(CarRacingRequestDto requestDto) {
 
-        List<String> carNameList = requestDto.carNameList();
+        // Car 도메인 객체로 변환
+        List<Car> cars = requestDto.carNameList().stream()
+                .map(CarDomainMapper::toDomain)
+                .toList();
+
         int roundCount = requestDto.roundCount();
 
         // 각 차의 현재 위치를 담을 Map 초기화
-        Map<String, Integer> carPositions = new HashMap<>(carNameList.size());
-        for (String carName : carNameList) {
-            carPositions.put(carName, 0); // 현재 위치를 0으로 초기화
+        Map<String, Integer> carPositions = new HashMap<>(cars.size());
+        for (Car car : cars) {
+            carPositions.put(car.getName(), 0); // 현재 위치를 0으로 초기화
         }
 
         // 레이스 시작
         List<CarRacingResponseDto.RacingRecord> racingRecords = new ArrayList<>();
         for (int curRound = 1; curRound <= roundCount; curRound++) {
             // 각 차에 대한 이동여부 결정
-            for (String carName : carNameList) {
+            for (Car car : cars) {
                 int randomNumber = Randoms.pickNumberInRange(0, 9);
                 if (randomNumber >= 4) {
                     // 난수가 4 이상이면 1 만큼 이동
-                    carPositions.put(carName, carPositions.get(carName) + 1);
+                    carPositions.put(car.getName(), carPositions.get(car.getName()) + 1);
                 }
             }
 
