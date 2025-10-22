@@ -53,19 +53,23 @@ public class CarRacingService {
         List<CarRacingResponseDto.RacingRecord> racingRecords = new ArrayList<>();
         for (int curRound = 1; curRound <= roundCount; curRound++) {
             // 각 차에 대한 이동여부 결정
-            for (Car car : cars) {
-                int randomNumber = Randoms.pickNumberInRange(0, 9);
-                if (randomNumber >= 4) {
-                    // 난수가 4 이상이면 1 만큼 이동
-                    carPositions.put(car.getName(), carPositions.get(car.getName()) + 1);
-                }
-            }
+            moveCars(cars, carPositions);
 
             // 현재 라운드에 대한 기록을 저장
             HashMap<String, Integer> curRoundResult = new HashMap<>(carPositions);
             racingRecords.add(new CarRacingResponseDto.RacingRecord(curRoundResult));
         }
         return racingRecords;
+    }
+
+    private static void moveCars(List<Car> cars, Map<String, Integer> carPositions) {
+        for (Car car : cars) {
+            int randomNumber = Randoms.pickNumberInRange(0, 9);
+            if (randomNumber >= 4) {
+                // 난수가 4 이상이면 1 만큼 이동
+                carPositions.put(car.getName(), carPositions.get(car.getName()) + 1);
+            }
+        }
     }
 
     private static List<String> processRaceResult(List<CarRacingResponseDto.RacingRecord> racingRecords) {
