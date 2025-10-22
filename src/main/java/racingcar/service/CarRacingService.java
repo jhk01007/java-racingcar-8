@@ -3,13 +3,10 @@ package racingcar.service;
 import camp.nextstep.edu.missionutils.Randoms;
 import racingcar.dto.CarRacingRequestDto;
 import racingcar.dto.CarRacingResponseDto;
-import racingcar.mapper.CarDomainMapper;
+import racingcar.mapper.CarRacingMapper;
 import racingcar.model.Car;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 자동차 경주 로직을 담당하는 클래스
@@ -40,12 +37,12 @@ public class CarRacingService {
 
     private static List<Car> convertToDomain(List<String> carNameList) {
         return carNameList.stream()
-                .map(CarDomainMapper::toDomain)
+                .map(CarRacingMapper::toDomain)
                 .toList();
     }
 
     private static Map<String, Integer> initCarPositionMap(List<Car> cars) {
-        Map<String, Integer> carPositions = new HashMap<>(cars.size());
+        Map<String, Integer> carPositions = new LinkedHashMap<>(cars.size());
         for (Car car : cars) {
             carPositions.put(car.getName(), 0); // 현재 위치를 0으로 초기화
         }
