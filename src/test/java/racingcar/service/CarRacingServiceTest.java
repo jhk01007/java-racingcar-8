@@ -1,6 +1,5 @@
 package racingcar.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import racingcar.dto.CarRacingRequestDto;
@@ -12,10 +11,10 @@ import static org.assertj.core.api.Assertions.*;
 
 class CarRacingServiceTest {
 
-    private CarRacingService carRacingService = new CarRacingService();
+    private final CarRacingService carRacingService = new CarRacingService();
 
     @Test
-    @DisplayName("")
+    @DisplayName("차의 이름 리스트와 라운드 수를 입력받아 자동차 레이싱을 진행한다.")
     public void start() throws Exception {
         // given
         List<String> carNameList = List.of("a", "b", "c");
