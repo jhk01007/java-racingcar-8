@@ -80,8 +80,7 @@ class CarRacingMapperTest {
                         "\n" +
                         "a : --\n" +
                         "b : ----\n" +
-                        "c : ----\n" +
-                        "\n");
+                        "c : ----\n");
     }
 
     private static LinkedHashMap<String, Integer> linkedMap(Object... kvs) {
