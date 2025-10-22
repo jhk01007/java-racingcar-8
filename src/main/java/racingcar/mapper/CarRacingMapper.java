@@ -36,6 +36,7 @@ public class CarRacingMapper {
             }
             rawRaceRecode.append("\n");
         }
+        rawRaceRecode.deleteCharAt(rawRaceRecode.length() - 1); // 마지막에 들어가는 개행문자 제거
         return rawRaceRecode.toString();
     }
 
