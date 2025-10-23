@@ -1,32 +1,55 @@
 package racingcar.mapper;
 
+import racingcar.domain.RacingRecord;
 import racingcar.dto.CarRacingRequestDto;
 import racingcar.dto.CarRacingResponseDto;
-import racingcar.model.Car;
+import racingcar.domain.Car;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 자동차 경주에 관해서 객체 매핑을 담당하는 클래스
+ */
 public class CarRacingMapper {
 
     public static Car toDomain(String carName) {
         return Car.create(carName);
     }
 
-    public static CarRacingRequestDto toRequestDto(String carNameList, String raceCount) {
+    /**
+     * 문자열 형태의 자동차 목록, 라운드 수를 CarRacingRequestDto로 변환
+     * @param carNameList - 자동차 목록
+     * @param roundCount - 라운드 수
+     */
+    public static CarRacingRequestDto toRequestDto(String carNameList, String roundCount) {
 
         String[] mappedCarNameList = mapCarNameList(carNameList);
 
-        int mappedRoundCount = mapRoundCount(raceCount);
+        int mappedRoundCount = mapRoundCount(roundCount);
         return new CarRacingRequestDto(Arrays.asList(mappedCarNameList), mappedRoundCount);
     }
 
-    public static String toRawRaceRecord(List<CarRacingResponseDto.RacingRecord> racingRecords) {
+    /**
+     * RacingRecord 도메인 리스트를 RacingRecordDto로 변환
+     * @param racingRecords - RacingRecord 도메인 리스트
+     */
+    public static List<CarRacingResponseDto.RacingRecordDto> toRacingRecordDto(List<RacingRecord> racingRecords) {
+        return racingRecords.stream()
+                .map(racingRecord -> new CarRacingResponseDto.RacingRecordDto(racingRecord.getCarPositions()))
+                .toList();
+    }
+
+    /**
+     * RacingRecordDto 리스트를 문자열 형태로 변환
+     * @param racingRecordDtos - RacingRecordDto 리스트
+     */
+    public static String toRawRaceRecord(List<CarRacingResponseDto.RacingRecordDto> racingRecordDtos) {
         StringBuilder rawRaceRecode = new StringBuilder();
 
-        for (CarRacingResponseDto.RacingRecord racingRecord : racingRecords) {
-            Map<String, Integer> carPositions = racingRecord.carPositions();
+        for (CarRacingResponseDto.RacingRecordDto racingRecordDto : racingRecordDtos) {
+            Map<String, Integer> carPositions = racingRecordDto.carPositions();
             for (String carName : carPositions.keySet()) {
                 rawRaceRecode.append(carName).append(" : ");
                 rawRaceRecode.append("-".repeat(Math.max(0, carPositions.get(carName))));
@@ -38,6 +61,10 @@ public class CarRacingMapper {
         return rawRaceRecode.toString();
     }
 
+    /**
+     * 우승자 리스트를 문자열 형태로 변환
+     * @param winners - 우승자 리스트
+     */
     public static String toRawWinner(List<String> winners) {
         return String.join(", ", winners);
     }

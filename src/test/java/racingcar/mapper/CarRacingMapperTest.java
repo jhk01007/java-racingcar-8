@@ -46,19 +46,19 @@ class CarRacingMapperTest {
     }
 
     @Test
-    @DisplayName("RacingRecord 리스트를 문자열 형태로 변환한다.")
+    @DisplayName("RacingRecordDto 리스트를 문자열 형태로 변환한다.")
     public void toRawRaceRecord_success() throws Exception {
         // given
-        List<CarRacingResponseDto.RacingRecord> racingRecords = List.of(
-                new CarRacingResponseDto.RacingRecord(linkedMap("a", 1, "b", 1, "c", 0)),
-                new CarRacingResponseDto.RacingRecord(linkedMap("a", 1, "b", 2, "c", 1)),
-                new CarRacingResponseDto.RacingRecord(linkedMap("a", 1, "b", 3, "c", 2)),
-                new CarRacingResponseDto.RacingRecord(linkedMap("a", 1, "b", 3, "c", 3)),
-                new CarRacingResponseDto.RacingRecord(linkedMap("a", 2, "b", 4, "c", 4))
+        List<CarRacingResponseDto.RacingRecordDto> racingRecordDtos = List.of(
+                new CarRacingResponseDto.RacingRecordDto(linkedMap("a", 1, "b", 1, "c", 0)),
+                new CarRacingResponseDto.RacingRecordDto(linkedMap("a", 1, "b", 2, "c", 1)),
+                new CarRacingResponseDto.RacingRecordDto(linkedMap("a", 1, "b", 3, "c", 2)),
+                new CarRacingResponseDto.RacingRecordDto(linkedMap("a", 1, "b", 3, "c", 3)),
+                new CarRacingResponseDto.RacingRecordDto(linkedMap("a", 2, "b", 4, "c", 4))
         );
 
         // when
-        String rawRaceRecord = CarRacingMapper.toRawRaceRecord(racingRecords);
+        String rawRaceRecord = CarRacingMapper.toRawRaceRecord(racingRecordDtos);
 
         // then
         Assertions.assertThat(rawRaceRecord)

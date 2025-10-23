@@ -25,11 +25,11 @@ class CarRacingServiceTest {
         CarRacingResponseDto responseDto = carRacingService.start(requestDto);
 
         // then - 결과는 무작위로 결정되기 때문에 정확한 결과를 테스트 하기 힘듦
-        List<CarRacingResponseDto.RacingRecord> racingRecords = responseDto.racingRecords();
+        List<CarRacingResponseDto.RacingRecordDto> racingRecordDtos = responseDto.racingRecordDtos();
 
-        assertThat(racingRecords)
+        assertThat(racingRecordDtos)
                 .hasSize(roundCount) // 라운드 수 = 기록 수
-                .extracting(CarRacingResponseDto.RacingRecord::carPositions)
+                .extracting(CarRacingResponseDto.RacingRecordDto::carPositions)
                 .allSatisfy(carPositions -> {
                     assertThat(carPositions)
                             .hasSize(carNameList.size()) // 각 라운드에 모든 차의 위치가 기록됨
