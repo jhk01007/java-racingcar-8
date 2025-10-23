@@ -7,6 +7,7 @@ public record CarRacingRequestDto(
         List<String> carNameList,
         int roundCount
 ) {
+
     public CarRacingRequestDto {
         validateCarNameList(carNameList);
         validateCarNameDuplicate(carNameList);

@@ -10,8 +10,6 @@ import java.util.Map;
 
 public class CarRacingMapper {
 
-    private static final String ROUND_COUNT_PARSE_ERROR_MESSAGE = "시도할 횟수로 숫자를 입력해주세요.";
-
     public static Car toDomain(String carName) {
         return Car.create(carName);
     }
@@ -53,7 +51,7 @@ public class CarRacingMapper {
         try {
             mappedRoundCount = Integer.parseInt(raceCount);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(ROUND_COUNT_PARSE_ERROR_MESSAGE);
+            throw new IllegalArgumentException("시도할 횟수로 숫자만 가능합니다.");
         }
         return mappedRoundCount;
     }

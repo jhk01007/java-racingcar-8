@@ -42,7 +42,7 @@ class CarRacingMapperTest {
         // when // then
         assertThatThrownBy(() -> CarRacingMapper.toRequestDto(carNameList, roundCount))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("시도할 횟수로 숫자를 입력해주세요.");
+                .hasMessage("시도할 횟수로 숫자만 가능합니다.");
     }
 
     @Test
