@@ -1,7 +1,6 @@
 package racingcar.domain;
 
 import camp.nextstep.edu.missionutils.Randoms;
-import racingcar.util.CarRacingValidator;
 
 import java.util.*;
 
@@ -22,11 +21,11 @@ public class CarRacing {
     }
 
     public List<RacingRecord> getRacingRecords() {
-        return racingRecords;
+        return Collections.unmodifiableList(racingRecords);
     }
 
     public List<String> getWinners() {
-        return winners;
+        return Collections.unmodifiableList(winners);
     }
 
     public static CarRacing create(List<Car> cars, int roundCount) {

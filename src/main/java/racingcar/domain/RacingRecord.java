@@ -1,5 +1,6 @@
 package racingcar.domain;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -8,14 +9,14 @@ import java.util.Map;
  */
 public class RacingRecord {
 
-    private Map<String, Integer> carPositions; // Key: 차이름, Value: 현재 위치
+    private final Map<String, Integer> carPositions; // Key: 차이름, Value: 현재 위치
 
     private RacingRecord(Map<String, Integer> carPositions) {
         this.carPositions = carPositions;
     }
 
     public Map<String, Integer> getCarPositions() {
-        return carPositions;
+        return Collections.unmodifiableMap(carPositions);
     }
 
     public static RacingRecord create(Map<String, Integer> carPositions) {
