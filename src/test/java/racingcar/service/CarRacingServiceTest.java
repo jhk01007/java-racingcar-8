@@ -43,4 +43,46 @@ class CarRacingServiceTest {
                 .allSatisfy(winner -> assertThat(carNameList).contains(winner)); // 모든 우승자가 유효한 차 이름
     }
 
+    @Test
+    @DisplayName("자동차가 2대미만이면 오류가 발생한다.")
+    public void start_fail1() throws Exception {
+        // given
+        List<String> carNameList = List.of("a");
+        int roundCount = 5;
+        CarRacingRequestDto requestDto = new CarRacingRequestDto(carNameList, roundCount);
+
+        // when // then
+        assertThatThrownBy(() -> carRacingService.start(requestDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("자동차는 최소 2대 이상이어야 합니다.");
+    }
+
+    @Test
+    @DisplayName("자동차 이름이 중복되면 오류가 발생한다.")
+    public void start_fail2() throws Exception {
+        // given
+        List<String> carNameList = List.of("a", "a", "b");
+        int roundCount = 5;
+        CarRacingRequestDto requestDto = new CarRacingRequestDto(carNameList, roundCount);
+
+        // when // then
+        assertThatThrownBy(() -> carRacingService.start(requestDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("자동차 이름은 중복될 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("라운드 수가 1보다 작으면 오류가 발생한다.")
+    public void start_fail3() throws Exception {
+        // given
+        List<String> carNameList = List.of("a", "b", "c");
+        int roundCount = 0;
+        CarRacingRequestDto requestDto = new CarRacingRequestDto(carNameList, roundCount);
+
+        // when // then
+        assertThatThrownBy(() -> carRacingService.start(requestDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("라운드는 최소 1개 이상이어야 합니다.");
+    }
+
 }

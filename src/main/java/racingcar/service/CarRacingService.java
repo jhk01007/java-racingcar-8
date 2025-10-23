@@ -5,6 +5,7 @@ import racingcar.dto.CarRacingRequestDto;
 import racingcar.dto.CarRacingResponseDto;
 import racingcar.mapper.CarRacingMapper;
 import racingcar.model.Car;
+import racingcar.util.CarRacingValidator;
 
 import java.util.*;
 
@@ -19,6 +20,9 @@ public class CarRacingService {
      * @return 라운드별 과정과 최종 우승자가 담긴 DTO
      */
     public CarRacingResponseDto start(CarRacingRequestDto requestDto) {
+
+        // 비즈니스 규칙 검증
+        CarRacingValidator.validateRequest(requestDto.carNameList(), requestDto.roundCount());
 
         // Car 도메인 객체로 변환
         List<Car> cars = convertToDomain(requestDto.carNameList());
