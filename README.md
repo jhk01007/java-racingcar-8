@@ -62,5 +62,183 @@ jun : -----
 
 > 모든 예외는 `IllegalArgumentException`으로 처리한다.
 >
-1. 입력받은 자동차의 이름이 5글자보다 클 경우
-2. 입력받은 시도 횟수가 1보다 작을 경우
+- [x]  입력받은 자동차의 수가 2보다 작은 경우
+- [x]  입력받은 자동차의 이름이 5글자 초과인 경우
+- [x]  입력받은 자동차의 이름이 1글자 미만인 경우
+- [x]  중복된 자동차 이름이 들어오는 경우
+- [x]  입력받은 시도 횟수가 1보다 작은 경우
+- [x]  입력받은 시도 횟수가 숫자가 아닌 경우
+
+## ✅ 프로그램 구조
+
+### 📖 핵심 도메인
+
+```mermaid
+classDiagram
+direction BT
+class Car {
+  - String name
+  + getName() String
+  + create(String) Car
+}
+class CarRacing {
+  - int roundCount
+  - List~Car~ cars
+  - List~RacingRecord~ racingRecords
+  - List~String~ winners
+  + getRacingRecords() List~RacingRecord~
+  + startRace() void
+  + getWinners() List~String~
+  + create(List~Car~, int) CarRacing
+  - createInitPositionMap() Map~String, Integer~
+  - moveCars(Map~String, Integer~) void
+  - processRaceResult() void
+}
+class RacingRecord {
+  - Map~String, Integer~ carPositions
+  + getCarPositions() Map~String, Integer~
+  + create(Map~String, Integer~) RacingRecord
+  + getTopCarName() List~String~
+}
+
+CarRacing "1" *--> "cars *" Car 
+CarRacing "1" *--> "racingRecords *" RacingRecord 
+```
+| 클래스 | 설명 |
+| --- | --- |
+| `CarRacing` | 자동차 경주 |
+| `Car` | 자동차 |
+| `RacingRecord` | 경주 라운드별 기록 |
+
+
+
+### 🏛️ 전체 클래스 구조
+```mermaid
+classDiagram
+direction BT
+class Application {
+  + main(String[]) void
+}
+class Car {
+  - String name
+  + getName() String
+  + create(String) Car
+}
+class CarRacing {
+  - int roundCount
+  - List~Car~ cars
+  - List~RacingRecord~ racingRecords
+  - List~String~ winners
+  + getRacingRecords() List~RacingRecord~
+  + startRace() void
+  + getWinners() List~String~
+  + create(List~Car~, int) CarRacing
+  - createInitPositionMap() Map~String, Integer~
+  - moveCars(Map~String, Integer~) void
+  - processRaceResult() void
+}
+class CarRacingController {
+  - CarRacingOutputView carRacingOutputView
+  - CarRacingService carRacingService
+  - CarRacingInputView carRacingInputView
+  + start() void
+}
+class CarRacingInputView {
+<<Interface>>
+  + readRoundCount() String
+  + readCarNames() String
+}
+class CarRacingMapper {
+  + toRequestDto(String, String) CarRacingRequestDto
+  + toRacingRecordDto(List~RacingRecord~) List~RacingRecordDto~
+  + toRawRaceRecord(List~RacingRecordDto~) String
+  + toDomain(String) Car
+  + toRawWinner(List~String~) String
+  - mapCarNameList(String) String[]
+  - mapRoundCount(String) int
+}
+class CarRacingOutputView {
+<<Interface>>
+  + writeResult(CarRacingResponseDto) void
+}
+class CarRacingRequestDto {
+  - int roundCount
+  - List~String~ carNameList
+  + roundCount() int
+  + carNameList() List~String~
+}
+class CarRacingResponseDto {
+  - List~RacingRecordDto~ racingRecordDtos
+  - List~String~ winners
+  + racingRecordDtos() List~RacingRecordDto~
+  + winners() List~String~
+}
+class CarRacingService {
+  + start(CarRacingRequestDto) CarRacingResponseDto
+  - convertToDomain(List~String~) List~Car~
+}
+class CarRacingValidator {
+  + validateCarNameLength(String) void
+  + validateRoundCount(int) void
+  + validateCarNameListSize(List~Car~) void
+  + validateCarNameDuplicate(List~Car~) void
+}
+class ConsoleCarRacingInputView {
+  - String CAR_NAME_GUIDE
+  - String ROUND_COUNT_GUIDE
+  + readCarNames() String
+  + readRoundCount() String
+}
+class ConsoleCarRacingOutputView {
+  + writeResult(CarRacingResponseDto) void
+}
+class RacingRecord {
+  - Map~String, Integer~ carPositions
+  + getCarPositions() Map~String, Integer~
+  + create(Map~String, Integer~) RacingRecord
+  + getTopCarName() List~String~
+}
+
+Application  ..>  CarRacingController : «create»
+Application  ..>  CarRacingService : «create»
+Application  ..>  ConsoleCarRacingInputView : «create»
+Application  ..>  ConsoleCarRacingOutputView : «create»
+CarRacing "1" *--> "cars *" Car 
+CarRacing "1" *--> "racingRecords *" RacingRecord 
+CarRacingController "1" *--> "carRacingInputView 1" CarRacingInputView 
+CarRacingController "1" *--> "carRacingOutputView 1" CarRacingOutputView 
+CarRacingController "1" *--> "carRacingService 1" CarRacingService 
+CarRacingMapper  ..>  CarRacingRequestDto : «create»
+CarRacingService  ..>  CarRacingResponseDto : «create»
+ConsoleCarRacingInputView  ..>  CarRacingInputView 
+ConsoleCarRacingOutputView  ..>  CarRacingOutputView 
+
+```
+
+
+
+### 🗂️ 디렉토리 구조
+```
+└── 📂racingcar/
+    ├── 📄 Application.java
+    ├── 📂 controller/
+    │   └── 📄 CarRacingController.java
+    ├── 📂 domain/
+    │   ├── 📄 Car.java
+    │   ├── 📄 CarRacing.java
+    │   └── 📄 RacingRecord.java
+    ├── 📂 dto/
+    │   ├── 📄 CarRacingRequestDto.java
+    │   └── 📄 CarRacingResponseDto.java
+    ├── 📂 mapper/
+    │   └── 📄 CarRacingMapper.java
+    ├── 📂 service/
+    │   └── 📄 CarRacingService.java
+    ├── 📂 util/
+    │   └── 📄 CarRacingValidator.java
+    └── 📂 view/
+        ├── 📄 CarRacingInputView.java
+        ├── 📄 CarRacingOutputView.java
+        ├── 📄 ConsoleCarRacingInputView.java
+        └── 📄 ConsoleCarRacingOutputView.java
+```
