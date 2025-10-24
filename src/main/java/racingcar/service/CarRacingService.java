@@ -1,9 +1,9 @@
 package racingcar.service;
 
-import racingcar.domain.CarRacing;
+import racingcar.domain.RacingGame;
 import racingcar.domain.RacingCar;
-import racingcar.dto.CarRacingRequestDto;
-import racingcar.dto.CarRacingResponseDto;
+import racingcar.dto.RacingGameRequestDto;
+import racingcar.dto.RacingGameResponseDto;
 import racingcar.mapper.CarRacingMapper;
 import racingcar.domain.Car;
 import java.util.*;
@@ -19,22 +19,22 @@ public class CarRacingService {
      * @param requestDto - 자동차 정보와 라운드 수가 담긴 DTO
      * @return 라운드별 과정과 최종 우승자가 담긴 DTO
      */
-    public CarRacingResponseDto start(CarRacingRequestDto requestDto) {
+    public RacingGameResponseDto start(RacingGameRequestDto requestDto) {
         // Car 도메인 객체로 변환
         List<Car> cars = convertToDomain(requestDto.carNameList());
 
         // RacingCar 도메인 객체 생성
         List<RacingCar> racingCars = createRacingCar(cars);
 
-        // CarRacing 객체 생성
-        CarRacing carRacing = CarRacing.create(racingCars, requestDto.roundCount());
+        // RacingGame 객체 생성
+        RacingGame racingGame = RacingGame.create(racingCars, requestDto.roundCount());
 
         // 레이스 시작
-        carRacing.startRace();
+        racingGame.startRace();
 
-        return new CarRacingResponseDto(
-                CarRacingMapper.toRacingRecordDto(carRacing.getRacingRecords()),
-                carRacing.getWinners()
+        return new RacingGameResponseDto(
+                CarRacingMapper.toRacingRecordDto(racingGame.getRacingRecords()),
+                racingGame.getWinners()
         );
     }
 

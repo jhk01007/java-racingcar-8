@@ -2,7 +2,7 @@ package racingcar.dto;
 
 import java.util.List;
 
-public record CarRacingRequestDto(
+public record RacingGameRequestDto(
         List<String> carNameList,
         int roundCount
 ) {

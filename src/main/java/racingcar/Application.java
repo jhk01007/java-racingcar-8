@@ -1,17 +1,17 @@
 package racingcar;
 
-import racingcar.controller.CarRacingController;
+import racingcar.controller.RacingGameController;
 import racingcar.service.CarRacingService;
-import racingcar.view.ConsoleCarRacingInputView;
-import racingcar.view.ConsoleCarRacingOutputView;
+import racingcar.view.ConsoleRacingGameInputView;
+import racingcar.view.ConsoleRacingGameOutputView;
 
 public class Application {
     public static void main(String[] args) {
-        ConsoleCarRacingInputView carRacingInputView = new ConsoleCarRacingInputView();
-        ConsoleCarRacingOutputView carRacingOutputView = new ConsoleCarRacingOutputView();
+        ConsoleRacingGameInputView carRacingInputView = new ConsoleRacingGameInputView();
+        ConsoleRacingGameOutputView carRacingOutputView = new ConsoleRacingGameOutputView();
         CarRacingService carRacingService = new CarRacingService();
 
-        CarRacingController carRacingController = new CarRacingController(carRacingInputView, carRacingOutputView, carRacingService);
-        carRacingController.start();
+        RacingGameController racingGameController = new RacingGameController(carRacingInputView, carRacingOutputView, carRacingService);
+        racingGameController.start();
     }
 }

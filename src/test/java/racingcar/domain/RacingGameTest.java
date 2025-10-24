@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class CarRacingTest {
+class RacingGameTest {
 
 
     @Test
@@ -17,7 +17,7 @@ class CarRacingTest {
         int roundCount = 5;
 
         // when // then
-        Assertions.assertThatThrownBy(() -> CarRacing.create(racingCars, roundCount))
+        Assertions.assertThatThrownBy(() -> RacingGame.create(racingCars, roundCount))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("자동차는 최소 2대 이상이어야 합니다.");
     }
@@ -33,7 +33,7 @@ class CarRacingTest {
         int roundCount = 5;
 
         // when // then
-        Assertions.assertThatThrownBy(() -> CarRacing.create(racingCars, roundCount))
+        Assertions.assertThatThrownBy(() -> RacingGame.create(racingCars, roundCount))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("자동차 이름은 중복될 수 없습니다.");
     }
@@ -49,7 +49,7 @@ class CarRacingTest {
         int roundCount = 0;
 
         // when // then
-        Assertions.assertThatThrownBy(() -> CarRacing.create(racingCars, roundCount))
+        Assertions.assertThatThrownBy(() -> RacingGame.create(racingCars, roundCount))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("라운드는 최소 1개 이상이어야 합니다.");
     }
@@ -63,10 +63,10 @@ class CarRacingTest {
                 createRacingCar("b")
         );
         int roundCount = 5;
-        CarRacing carRacing = CarRacing.create(racingCars, roundCount);
+        RacingGame racingGame = RacingGame.create(racingCars, roundCount);
 
         // when // then
-        List<RacingRecord> racingRecords = carRacing.getRacingRecords();
+        List<RacingRecord> racingRecords = racingGame.getRacingRecords();
         Assertions.assertThatThrownBy(racingRecords::clear)
                 .isInstanceOf(UnsupportedOperationException.class);
     }
@@ -80,10 +80,10 @@ class CarRacingTest {
                 createRacingCar("b")
         );
         int roundCount = 5;
-        CarRacing carRacing = CarRacing.create(racingCars, roundCount);
+        RacingGame racingGame = RacingGame.create(racingCars, roundCount);
 
         // when // then
-        List<String> winners = carRacing.getWinners();
+        List<String> winners = racingGame.getWinners();
         Assertions.assertThatThrownBy(winners::clear)
                 .isInstanceOf(UnsupportedOperationException.class);
     }

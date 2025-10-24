@@ -3,15 +3,15 @@ package racingcar.service;
 import camp.nextstep.edu.missionutils.test.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import racingcar.dto.CarRacingRequestDto;
-import racingcar.dto.CarRacingResponseDto;
+import racingcar.dto.RacingGameRequestDto;
+import racingcar.dto.RacingGameResponseDto;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 
-class CarRacingServiceTest {
+class RacingGameServiceTest {
 
     private static final int MOVING_FORWARD = 4;
     private static final int STOP = 3;
@@ -24,13 +24,13 @@ class CarRacingServiceTest {
         // given
         List<String> carNameList = List.of("a", "b", "c");
         int roundCount = 3;
-        CarRacingRequestDto requestDto = new CarRacingRequestDto(carNameList, roundCount);
+        RacingGameRequestDto requestDto = new RacingGameRequestDto(carNameList, roundCount);
 
         // when // then
         Assertions.assertRandomNumberInRangeTest(
                 () -> {
-                    CarRacingResponseDto responseDto = carRacingService.start(requestDto);
-                    List<CarRacingResponseDto.RacingRecordDto> records = responseDto.racingRecordDtos();
+                    RacingGameResponseDto responseDto = carRacingService.start(requestDto);
+                    List<RacingGameResponseDto.RacingRecordDto> records = responseDto.racingRecordDtos();
 
                     // 라운드별로 carPositions 검증
                     assertThat(records).hasSize(roundCount);
@@ -61,7 +61,7 @@ class CarRacingServiceTest {
         // given
         List<String> carNameList = List.of("a");
         int roundCount = 5;
-        CarRacingRequestDto requestDto = new CarRacingRequestDto(carNameList, roundCount);
+        RacingGameRequestDto requestDto = new RacingGameRequestDto(carNameList, roundCount);
 
         // when // then
         assertThatThrownBy(() -> carRacingService.start(requestDto))
@@ -75,7 +75,7 @@ class CarRacingServiceTest {
         // given
         List<String> carNameList = List.of("a", "a", "b");
         int roundCount = 5;
-        CarRacingRequestDto requestDto = new CarRacingRequestDto(carNameList, roundCount);
+        RacingGameRequestDto requestDto = new RacingGameRequestDto(carNameList, roundCount);
 
         // when // then
         assertThatThrownBy(() -> carRacingService.start(requestDto))
@@ -89,7 +89,7 @@ class CarRacingServiceTest {
         // given
         List<String> carNameList = List.of("a", "b", "c");
         int roundCount = 0;
-        CarRacingRequestDto requestDto = new CarRacingRequestDto(carNameList, roundCount);
+        RacingGameRequestDto requestDto = new RacingGameRequestDto(carNameList, roundCount);
 
         // when // then
         assertThatThrownBy(() -> carRacingService.start(requestDto))

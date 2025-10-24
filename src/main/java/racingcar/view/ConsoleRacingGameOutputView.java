@@ -1,13 +1,13 @@
 package racingcar.view;
 
-import racingcar.dto.CarRacingResponseDto;
+import racingcar.dto.RacingGameResponseDto;
 import racingcar.mapper.CarRacingMapper;
 
-public class ConsoleCarRacingOutputView implements CarRacingOutputView {
+public class ConsoleRacingGameOutputView implements RacingGameOutputView {
 
 
     @Override
-    public void writeResult(CarRacingResponseDto responseDto) {
+    public void writeResult(RacingGameResponseDto responseDto) {
         System.out.println("실행 결과");
 
         // 라운드별 결과 출력

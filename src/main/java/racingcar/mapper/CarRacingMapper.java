@@ -1,8 +1,8 @@
 package racingcar.mapper;
 
 import racingcar.domain.RacingRecord;
-import racingcar.dto.CarRacingRequestDto;
-import racingcar.dto.CarRacingResponseDto;
+import racingcar.dto.RacingGameRequestDto;
+import racingcar.dto.RacingGameResponseDto;
 import racingcar.domain.Car;
 
 import java.util.Arrays;
@@ -24,8 +24,8 @@ public class CarRacingMapper {
      * @param carNameList - 자동차 목록
      * @param roundCount  - 라운드 수
      */
-    public static CarRacingRequestDto toRequestDto(String carNameList, String roundCount) {
-        return new CarRacingRequestDto(
+    public static RacingGameRequestDto toRequestDto(String carNameList, String roundCount) {
+        return new RacingGameRequestDto(
                 mapCarNameList(carNameList), mapRoundCount(roundCount));
     }
 
@@ -34,9 +34,9 @@ public class CarRacingMapper {
      *
      * @param racingRecords - RacingRecord 도메인 리스트
      */
-    public static List<CarRacingResponseDto.RacingRecordDto> toRacingRecordDto(List<RacingRecord> racingRecords) {
+    public static List<RacingGameResponseDto.RacingRecordDto> toRacingRecordDto(List<RacingRecord> racingRecords) {
         return racingRecords.stream()
-                .map(racingRecord -> new CarRacingResponseDto.RacingRecordDto(racingRecord.getCarPositions()))
+                .map(racingRecord -> new RacingGameResponseDto.RacingRecordDto(racingRecord.getCarPositions()))
                 .toList();
     }
 
@@ -45,10 +45,10 @@ public class CarRacingMapper {
      *
      * @param racingRecordDtos - RacingRecordDto 리스트
      */
-    public static String toRawRaceRecord(List<CarRacingResponseDto.RacingRecordDto> racingRecordDtos) {
+    public static String toRawRaceRecord(List<RacingGameResponseDto.RacingRecordDto> racingRecordDtos) {
         StringBuilder rawRaceRecode = new StringBuilder();
 
-        for (CarRacingResponseDto.RacingRecordDto racingRecordDto : racingRecordDtos) {
+        for (RacingGameResponseDto.RacingRecordDto racingRecordDto : racingRecordDtos) {
             Map<String, Integer> carPositions = racingRecordDto.carPositions();
             for (String carName : carPositions.keySet()) {
                 rawRaceRecode.append(carName).append(" : ");

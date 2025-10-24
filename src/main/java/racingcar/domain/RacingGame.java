@@ -4,14 +4,14 @@ import java.util.*;
 
 import static racingcar.util.CarRacingValidator.*;
 
-public class CarRacing {
+public class RacingGame {
 
     private final List<RacingCar> racingCars;
     private final List<RacingRecord> racingRecords;
     private final List<String> winners;
     private final int roundCount;
 
-    private CarRacing(List<RacingCar> racingCars, List<RacingRecord> racingRecords, List<String> winners, int roundCount) {
+    private RacingGame(List<RacingCar> racingCars, List<RacingRecord> racingRecords, List<String> winners, int roundCount) {
         this.racingCars = racingCars;
         this.racingRecords = racingRecords;
         this.winners = winners;
@@ -26,11 +26,11 @@ public class CarRacing {
         return Collections.unmodifiableList(winners);
     }
 
-    public static CarRacing create(List<RacingCar> racingCars, int roundCount) {
+    public static RacingGame create(List<RacingCar> racingCars, int roundCount) {
         validateCarListSize(racingCars);
         validateCarNameDuplicate(racingCars);
         validateRoundCount(roundCount);
-        return new CarRacing(racingCars, new ArrayList<>(), new ArrayList<>(), roundCount);
+        return new RacingGame(racingCars, new ArrayList<>(), new ArrayList<>(), roundCount);
     }
 
     public void startRace() {

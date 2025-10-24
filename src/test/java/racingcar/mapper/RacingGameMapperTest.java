@@ -3,8 +3,8 @@ package racingcar.mapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import racingcar.dto.CarRacingRequestDto;
-import racingcar.dto.CarRacingResponseDto;
+import racingcar.dto.RacingGameRequestDto;
+import racingcar.dto.RacingGameResponseDto;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,17 +12,17 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class CarRacingMapperTest {
+class RacingGameMapperTest {
 
     @Test
-    @DisplayName("문자열 형태의 차 이름 목록과 라운드 수를 CarRacingRequestDto 형태에 맞게 변환한다.")
+    @DisplayName("문자열 형태의 차 이름 목록과 라운드 수를 RacingGameRequestDto 형태에 맞게 변환한다.")
     public void toRequestDto_success() throws Exception {
         // given
         String carNameList = "pobi,woni,jun";
         String roundCount = "5";
 
         // when
-        CarRacingRequestDto dto = CarRacingMapper.toRequestDto(carNameList, roundCount);
+        RacingGameRequestDto dto = CarRacingMapper.toRequestDto(carNameList, roundCount);
 
         // then
         assertThat(dto).isNotNull();
@@ -49,12 +49,12 @@ class CarRacingMapperTest {
     @DisplayName("RacingRecordDto 리스트를 문자열 형태로 변환한다.")
     public void toRawRaceRecord_success() throws Exception {
         // given
-        List<CarRacingResponseDto.RacingRecordDto> racingRecordDtos = List.of(
-                new CarRacingResponseDto.RacingRecordDto(linkedMap("a", 1, "b", 1, "c", 0)),
-                new CarRacingResponseDto.RacingRecordDto(linkedMap("a", 1, "b", 2, "c", 1)),
-                new CarRacingResponseDto.RacingRecordDto(linkedMap("a", 1, "b", 3, "c", 2)),
-                new CarRacingResponseDto.RacingRecordDto(linkedMap("a", 1, "b", 3, "c", 3)),
-                new CarRacingResponseDto.RacingRecordDto(linkedMap("a", 2, "b", 4, "c", 4))
+        List<RacingGameResponseDto.RacingRecordDto> racingRecordDtos = List.of(
+                new RacingGameResponseDto.RacingRecordDto(linkedMap("a", 1, "b", 1, "c", 0)),
+                new RacingGameResponseDto.RacingRecordDto(linkedMap("a", 1, "b", 2, "c", 1)),
+                new RacingGameResponseDto.RacingRecordDto(linkedMap("a", 1, "b", 3, "c", 2)),
+                new RacingGameResponseDto.RacingRecordDto(linkedMap("a", 1, "b", 3, "c", 3)),
+                new RacingGameResponseDto.RacingRecordDto(linkedMap("a", 2, "b", 4, "c", 4))
         );
 
         // when

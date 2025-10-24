@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-class CarRacingValidatorTest {
+class RacingGameValidatorTest {
 
 
     @Test

@@ -3,7 +3,7 @@ package racingcar.dto;
 import java.util.List;
 import java.util.Map;
 
-public record CarRacingResponseDto(
+public record RacingGameResponseDto(
         List<RacingRecordDto> racingRecordDtos,
         List<String> winners
 ) {

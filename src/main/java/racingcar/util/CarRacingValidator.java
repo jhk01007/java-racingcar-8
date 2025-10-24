@@ -1,7 +1,5 @@
 package racingcar.util;
 
-import racingcar.domain.Car;
-import racingcar.domain.CarRacing;
 import racingcar.domain.RacingCar;
 
 import java.util.HashSet;
