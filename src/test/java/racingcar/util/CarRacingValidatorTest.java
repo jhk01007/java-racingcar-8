@@ -3,48 +3,43 @@ package racingcar.util;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import racingcar.domain.Car;
+import racingcar.domain.RacingCar;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 class CarRacingValidatorTest {
 
-    // --- validateCarNameListSize ---
 
     @Test
     @DisplayName("자동차가 2대 미만이거나 null이면 예외가 발생한다")
-    void validateCarNameListSize_fail() {
+    void validateCarListSize_fail() {
         // given
-        List<Car> oneCar = cars("only");
-        List<Car> nullList = null;
+        List<RacingCar> oneCar = racingCars("only");
+        List<RacingCar> nullList = null;
 
         // expect
-        assertThatThrownBy(() -> CarRacingValidator.validateCarNameListSize(oneCar))
+        assertThatThrownBy(() -> CarRacingValidator.validateCarListSize(oneCar))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("자동차는 최소 2대 이상이어야 합니다.");
 
-        assertThatThrownBy(() -> CarRacingValidator.validateCarNameListSize(nullList))
+        assertThatThrownBy(() -> CarRacingValidator.validateCarListSize(nullList))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("자동차는 최소 2대 이상이어야 합니다.");
     }
-
-    // --- validateCarNameDuplicate ---
 
     @Test
     @DisplayName("자동차 이름이 중복되면 예외가 발생한다")
     void validateCarNameDuplicate_fail() {
         // given
-        List<Car> cars = cars("dup", "dup", "other");
+        List<RacingCar> cars = racingCars("dup", "dup", "other");
 
         // expect
         assertThatThrownBy(() -> CarRacingValidator.validateCarNameDuplicate(cars))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("자동차 이름은 중복될 수 없습니다.");
     }
-
-    // --- validateCarNameLength ---
 
     @Test
     @DisplayName("이름이 비어있으면 예외가 발생한다")
@@ -70,8 +65,6 @@ class CarRacingValidatorTest {
                 .hasMessage("자동차의 이름은 최대 5글자까지 가능합니다.");
     }
 
-    // --- validateRoundCount ---
-
     @Test
     @DisplayName("라운드가 0 이하이면 예외가 발생한다")
     void validateRoundCount_fail() {
@@ -90,9 +83,12 @@ class CarRacingValidatorTest {
     }
 
     // --- helper ---
-    private static List<Car> cars(String... names) {
+    private static List<RacingCar> racingCars(String... names) {
         return java.util.Arrays.stream(names)
-                .map(Car::create)
+                .map(name -> RacingCar.create(
+                        Car.create(name),
+                        0
+                ))
                 .toList();
     }
 

@@ -1,6 +1,7 @@
 package racingcar.service;
 
 import racingcar.domain.CarRacing;
+import racingcar.domain.RacingCar;
 import racingcar.dto.CarRacingRequestDto;
 import racingcar.dto.CarRacingResponseDto;
 import racingcar.mapper.CarRacingMapper;
@@ -22,8 +23,11 @@ public class CarRacingService {
         // Car 도메인 객체로 변환
         List<Car> cars = convertToDomain(requestDto.carNameList());
 
+        // RacingCar 도메인 객체 생성
+        List<RacingCar> racingCars = createRacingCar(cars);
+
         // CarRacing 객체 생성
-        CarRacing carRacing = CarRacing.create(cars, requestDto.roundCount());
+        CarRacing carRacing = CarRacing.create(racingCars, requestDto.roundCount());
 
         // 레이스 시작
         carRacing.startRace();
@@ -37,6 +41,12 @@ public class CarRacingService {
     private static List<Car> convertToDomain(List<String> carNameList) {
         return carNameList.stream()
                 .map(CarRacingMapper::toDomain)
+                .toList();
+    }
+
+    private static List<RacingCar> createRacingCar(List<Car> cars) {
+        return cars.stream()
+                .map(car -> RacingCar.create(car, 0))
                 .toList();
     }
 }

@@ -1,6 +1,8 @@
 package racingcar.util;
 
 import racingcar.domain.Car;
+import racingcar.domain.CarRacing;
+import racingcar.domain.RacingCar;
 
 import java.util.HashSet;
 import java.util.List;
@@ -10,15 +12,15 @@ import java.util.List;
  */
 public class CarRacingValidator {
 
-    public static void validateCarNameListSize(List<Car> cars) {
-        if (cars == null || cars.size() < 2) {
+    public static void validateCarListSize(List<RacingCar> racingCars) {
+        if (racingCars == null || racingCars.size() < 2) {
             throw new IllegalArgumentException("자동차는 최소 2대 이상이어야 합니다.");
         }
     }
 
-    public static void validateCarNameDuplicate(List<Car> cars) {
-        List<String> carNameList = cars.stream()
-                .map(Car::getName)
+    public static void validateCarNameDuplicate(List<RacingCar> racingCars) {
+        List<String> carNameList = racingCars.stream()
+                .map(RacingCar::getCarName)
                 .toList();
 
         HashSet<String> carNameSet = new HashSet<>(carNameList);
