@@ -92,33 +92,41 @@ class Car {
   + getName() String
   + create(String) Car
 }
-class CarRacing {
-  - int roundCount
-  - List~Car~ cars
+class RacingCar {
+  - Car car
+  - int position
+  + attemptMove() void
+  + create(Car, int) RacingCar
+  + getCarName() String
+  + getPosition() int
+}
+class RacingGame {
+  - List~RacingCar~ racingCars
   - List~RacingRecord~ racingRecords
+  - int roundCount
   - List~String~ winners
-  + getRacingRecords() List~RacingRecord~
-  + startRace() void
-  + getWinners() List~String~
-  + create(List~Car~, int) CarRacing
+  + startRace() RaceResult
+  + create(List~RacingCar~, int) RacingGame
   - createInitPositionMap() Map~String, Integer~
-  - moveCars(Map~String, Integer~) void
   - processRaceResult() void
+  - moveCars(Map~String, Integer~) void
 }
 class RacingRecord {
   - Map~String, Integer~ carPositions
-  + getCarPositions() Map~String, Integer~
-  + create(Map~String, Integer~) RacingRecord
   + getTopCarName() List~String~
+  + create(Map~String, Integer~) RacingRecord
+  + getCarPositions() Map~String, Integer~
 }
 
-CarRacing "1" *--> "cars *" Car 
-CarRacing "1" *--> "racingRecords *" RacingRecord 
+RacingCar "1" *--> "car 1" Car 
+RacingGame "1" *--> "racingCars *" RacingCar 
+RacingGame "1" *--> "racingRecords *" RacingRecord 
 ```
 | 클래스 | 설명 |
 | --- | --- |
 | `CarRacing` | 자동차 경주 |
 | `Car` | 자동차 |
+| `RacingCar` | 자동자 경주에 참가하는 차 |
 | `RacingRecord` | 경주 라운드별 기록 |
 
 
@@ -135,112 +143,120 @@ class Car {
   + getName() String
   + create(String) Car
 }
-class CarRacing {
-  - int roundCount
-  - List~Car~ cars
-  - List~RacingRecord~ racingRecords
-  - List~String~ winners
-  + getRacingRecords() List~RacingRecord~
-  + startRace() void
-  + getWinners() List~String~
-  + create(List~Car~, int) CarRacing
-  - createInitPositionMap() Map~String, Integer~
-  - moveCars(Map~String, Integer~) void
-  - processRaceResult() void
-}
-class CarRacingController {
-  - CarRacingOutputView carRacingOutputView
-  - CarRacingService carRacingService
-  - CarRacingInputView carRacingInputView
-  + start() void
-}
-class CarRacingInputView {
-<<Interface>>
-  + readRoundCount() String
-  + readCarNames() String
-}
 class CarRacingMapper {
-  + toRequestDto(String, String) CarRacingRequestDto
-  + toRacingRecordDto(List~RacingRecord~) List~RacingRecordDto~
   + toRawRaceRecord(List~RacingRecordDto~) String
-  + toDomain(String) Car
   + toRawWinner(List~String~) String
-  - mapCarNameList(String) String[]
+  + toDomain(String) Car
+  + toRequestDto(String, String) RacingGameRequestDto
+  + toRacingRecordDto(List~RacingRecord~) List~RacingRecordDto~
   - mapRoundCount(String) int
-}
-class CarRacingOutputView {
-<<Interface>>
-  + writeResult(CarRacingResponseDto) void
-}
-class CarRacingRequestDto {
-  - int roundCount
-  - List~String~ carNameList
-  + roundCount() int
-  + carNameList() List~String~
-}
-class CarRacingResponseDto {
-  - List~RacingRecordDto~ racingRecordDtos
-  - List~String~ winners
-  + racingRecordDtos() List~RacingRecordDto~
-  + winners() List~String~
+  - mapCarNameList(String) List~String~
 }
 class CarRacingService {
-  + start(CarRacingRequestDto) CarRacingResponseDto
+  + start(RacingGameRequestDto) RacingGameResponseDto
+  - createRacingCar(List~Car~) List~RacingCar~
   - convertToDomain(List~String~) List~Car~
 }
 class CarRacingValidator {
-  + validateCarNameLength(String) void
   + validateRoundCount(int) void
-  + validateCarNameListSize(List~Car~) void
-  + validateCarNameDuplicate(List~Car~) void
+  + validateCarListSize(List~RacingCar~) void
+  + validateCarNameLength(String) void
+  + validateCarNameDuplicate(List~RacingCar~) void
 }
-class ConsoleCarRacingInputView {
+class ConsoleRacingGameInputView {
   - String CAR_NAME_GUIDE
   - String ROUND_COUNT_GUIDE
   + readCarNames() String
   + readRoundCount() String
 }
-class ConsoleCarRacingOutputView {
-  + writeResult(CarRacingResponseDto) void
+class ConsoleRacingGameOutputView {
+  + writeResult(RacingGameResponseDto) void
+}
+class RacingCar {
+  - Car car
+  - int position
+  + attemptMove() void
+  + create(Car, int) RacingCar
+  + getCarName() String
+  + getPosition() int
+}
+class RacingGame {
+  - List~RacingCar~ racingCars
+  - List~RacingRecord~ racingRecords
+  - int roundCount
+  - List~String~ winners
+  + startRace() RaceResult
+  + create(List~RacingCar~, int) RacingGame
+  - createInitPositionMap() Map~String, Integer~
+  - processRaceResult() void
+  - moveCars(Map~String, Integer~) void
+}
+class RacingGameController {
+  - RacingGameInputView racingGameInputView
+  - RacingGameOutputView racingGameOutputView
+  - CarRacingService carRacingService
+  + start() void
+}
+class RacingGameInputView {
+<<Interface>>
+  + readCarNames() String
+  + readRoundCount() String
+}
+class RacingGameOutputView {
+<<Interface>>
+  + writeResult(RacingGameResponseDto) void
+}
+class RacingGameRequestDto {
+  - List~String~ carNameList
+  - int roundCount
+  + carNameList() List~String~
+  + roundCount() int
+}
+class RacingGameResponseDto {
+  - List~RacingRecordDto~ racingRecordDtos
+  - List~String~ winners
+  + winners() List~String~
+  + racingRecordDtos() List~RacingRecordDto~
 }
 class RacingRecord {
   - Map~String, Integer~ carPositions
-  + getCarPositions() Map~String, Integer~
-  + create(Map~String, Integer~) RacingRecord
   + getTopCarName() List~String~
+  + create(Map~String, Integer~) RacingRecord
+  + getCarPositions() Map~String, Integer~
 }
 
-Application  ..>  CarRacingController : «create»
 Application  ..>  CarRacingService : «create»
-Application  ..>  ConsoleCarRacingInputView : «create»
-Application  ..>  ConsoleCarRacingOutputView : «create»
-CarRacing "1" *--> "cars *" Car 
-CarRacing "1" *--> "racingRecords *" RacingRecord 
-CarRacingController "1" *--> "carRacingInputView 1" CarRacingInputView 
-CarRacingController "1" *--> "carRacingOutputView 1" CarRacingOutputView 
-CarRacingController "1" *--> "carRacingService 1" CarRacingService 
-CarRacingMapper  ..>  CarRacingRequestDto : «create»
-CarRacingService  ..>  CarRacingResponseDto : «create»
-ConsoleCarRacingInputView  ..>  CarRacingInputView 
-ConsoleCarRacingOutputView  ..>  CarRacingOutputView 
-
+Application  ..>  ConsoleRacingGameInputView : «create»
+Application  ..>  ConsoleRacingGameOutputView : «create»
+Application  ..>  RacingGameController : «create»
+CarRacingMapper  ..>  RacingGameRequestDto : «create»
+CarRacingService  ..>  RacingGameResponseDto : «create»
+ConsoleRacingGameInputView  ..>  RacingGameInputView 
+ConsoleRacingGameOutputView  ..>  RacingGameOutputView 
+RacingCar "1" *--> "car 1" Car 
+RacingGame "1" *--> "racingCars *" RacingCar 
+RacingGame "1" *--> "racingRecords *" RacingRecord 
+RacingGameController "1" *--> "carRacingService 1" CarRacingService 
+RacingGameController "1" *--> "racingGameInputView 1" RacingGameInputView 
+RacingGameController "1" *--> "racingGameOutputView 1" RacingGameOutputView 
 ```
 
 
 
 ### 🗂️ 디렉토리 구조
 ```
-└── 📂racingcar/
+└── 📂 racingcar/
     ├── 📄 Application.java
     ├── 📂 controller/
-    │   └── 📄 CarRacingController.java
+    │   └── 📄 RacingGameController.java
     ├── 📂 domain/
     │   ├── 📄 Car.java
-    │   ├── 📄 CarRacing.java
+    │   ├── 📄 RacingCar.java
+    │   ├── 📄 RacingGame.java
     │   └── 📄 RacingRecord.java
     ├── 📂 dto/
-    │   ├── 📄 CarRacingRequestDto.java
-    │   └── 📄 CarRacingResponseDto.java
+    │   ├── 📄 RacingGameRequestDto.java
+    │   └── 📄 RacingGameResponseDto.java
     ├── 📂 mapper/
     │   └── 📄 CarRacingMapper.java
     ├── 📂 service/
@@ -248,8 +264,8 @@ ConsoleCarRacingOutputView  ..>  CarRacingOutputView
     ├── 📂 util/
     │   └── 📄 CarRacingValidator.java
     └── 📂 view/
-        ├── 📄 CarRacingInputView.java
-        ├── 📄 CarRacingOutputView.java
-        ├── 📄 ConsoleCarRacingInputView.java
-        └── 📄 ConsoleCarRacingOutputView.java
+        ├── 📄 ConsoleRacingGameInputView.java
+        ├── 📄 ConsoleRacingGameOutputView.java
+        ├── 📄 RacingGameInputView.java
+        └── 📄 RacingGameOutputView.java
 ```
