@@ -30,11 +30,11 @@ public class CarRacingService {
         RacingGame racingGame = RacingGame.create(racingCars, requestDto.roundCount());
 
         // 레이스 시작
-        racingGame.startRace();
+        RacingGame.RaceResult raceResult = racingGame.startRace();
 
         return new RacingGameResponseDto(
-                CarRacingMapper.toRacingRecordDto(racingGame.getRacingRecords()),
-                racingGame.getWinners()
+                CarRacingMapper.toRacingRecordDto(raceResult.racingRecords()),
+                raceResult.winners()
         );
     }
 

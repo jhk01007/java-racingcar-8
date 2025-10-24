@@ -54,40 +54,6 @@ class RacingGameTest {
                 .hasMessage("라운드는 최소 1개 이상이어야 합니다.");
     }
 
-    @Test
-    @DisplayName("racingRecords를 외부에서 수정하려고 하면 에러가 발생한다.")
-    public void getRacingRecords_error() throws Exception {
-        // given
-        List<RacingCar> racingCars = List.of(
-                createRacingCar("a"),
-                createRacingCar("b")
-        );
-        int roundCount = 5;
-        RacingGame racingGame = RacingGame.create(racingCars, roundCount);
-
-        // when // then
-        List<RacingRecord> racingRecords = racingGame.getRacingRecords();
-        Assertions.assertThatThrownBy(racingRecords::clear)
-                .isInstanceOf(UnsupportedOperationException.class);
-    }
-
-    @Test
-    @DisplayName("winners를 외부에서 수정하려고 하면 에러가 발생한다.")
-    public void getWinners_error() throws Exception {
-        // given
-        List<RacingCar> racingCars = List.of(
-                createRacingCar("a"),
-                createRacingCar("b")
-        );
-        int roundCount = 5;
-        RacingGame racingGame = RacingGame.create(racingCars, roundCount);
-
-        // when // then
-        List<String> winners = racingGame.getWinners();
-        Assertions.assertThatThrownBy(winners::clear)
-                .isInstanceOf(UnsupportedOperationException.class);
-    }
-
     private static RacingCar createRacingCar(String name) {
         return RacingCar.create(Car.create(name), 0);
     }

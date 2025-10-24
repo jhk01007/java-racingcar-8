@@ -18,14 +18,6 @@ public class RacingGame {
         this.roundCount = roundCount;
     }
 
-    public List<RacingRecord> getRacingRecords() {
-        return Collections.unmodifiableList(racingRecords);
-    }
-
-    public List<String> getWinners() {
-        return Collections.unmodifiableList(winners);
-    }
-
     public static RacingGame create(List<RacingCar> racingCars, int roundCount) {
         validateCarListSize(racingCars);
         validateCarNameDuplicate(racingCars);
@@ -33,7 +25,10 @@ public class RacingGame {
         return new RacingGame(racingCars, new ArrayList<>(), new ArrayList<>(), roundCount);
     }
 
-    public void startRace() {
+    // 레이싱 결과를 반환하기 위한 임시 record 클래스. 단순 값만 반환하는 역할을 함
+    public record RaceResult(List<RacingRecord> racingRecords, List<String> winners) {}
+
+    public RaceResult startRace() {
         Map<String, Integer> carPositionMap = createInitPositionMap();
         for (int curRound = 1; curRound <= roundCount; curRound++) {
             // 각 자동차 이동
@@ -46,6 +41,11 @@ public class RacingGame {
 
         // 레이싱 결과 처리
         processRaceResult();
+
+        return new RaceResult(
+                Collections.unmodifiableList(this.racingRecords),
+                Collections.unmodifiableList(this.winners)
+        );
     }
 
     private Map<String, Integer> createInitPositionMap() {
