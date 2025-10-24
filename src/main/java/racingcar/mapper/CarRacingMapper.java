@@ -20,19 +20,18 @@ public class CarRacingMapper {
 
     /**
      * 문자열 형태의 자동차 목록, 라운드 수를 CarRacingRequestDto로 변환
+     *
      * @param carNameList - 자동차 목록
-     * @param roundCount - 라운드 수
+     * @param roundCount  - 라운드 수
      */
     public static CarRacingRequestDto toRequestDto(String carNameList, String roundCount) {
-
-        String[] mappedCarNameList = mapCarNameList(carNameList);
-
-        int mappedRoundCount = mapRoundCount(roundCount);
-        return new CarRacingRequestDto(Arrays.asList(mappedCarNameList), mappedRoundCount);
+        return new CarRacingRequestDto(
+                mapCarNameList(carNameList), mapRoundCount(roundCount));
     }
 
     /**
      * RacingRecord 도메인 리스트를 RacingRecordDto로 변환
+     *
      * @param racingRecords - RacingRecord 도메인 리스트
      */
     public static List<CarRacingResponseDto.RacingRecordDto> toRacingRecordDto(List<RacingRecord> racingRecords) {
@@ -43,6 +42,7 @@ public class CarRacingMapper {
 
     /**
      * RacingRecordDto 리스트를 문자열 형태로 변환
+     *
      * @param racingRecordDtos - RacingRecordDto 리스트
      */
     public static String toRawRaceRecord(List<CarRacingResponseDto.RacingRecordDto> racingRecordDtos) {
@@ -63,14 +63,18 @@ public class CarRacingMapper {
 
     /**
      * 우승자 리스트를 문자열 형태로 변환
+     *
      * @param winners - 우승자 리스트
      */
     public static String toRawWinner(List<String> winners) {
         return String.join(", ", winners);
     }
 
-    private static String[] mapCarNameList(String carNameList) {
-        return carNameList.split(",", -1);
+    private static List<String> mapCarNameList(String carNameList) {
+        String[] split = carNameList.split(",", -1);
+        return Arrays.stream(split)
+                .map(String::trim) // 이름 앞 뒤에 포함되어 있는 공백 제거
+                .toList();
     }
 
     private static int mapRoundCount(String raceCount) {
