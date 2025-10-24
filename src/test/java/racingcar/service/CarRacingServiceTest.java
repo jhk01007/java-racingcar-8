@@ -1,15 +1,20 @@
 package racingcar.service;
 
+import camp.nextstep.edu.missionutils.test.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import racingcar.dto.CarRacingRequestDto;
 import racingcar.dto.CarRacingResponseDto;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 
 class CarRacingServiceTest {
+
+    private static final int MOVING_FORWARD = 4;
+    private static final int STOP = 3;
 
     private final CarRacingService carRacingService = new CarRacingService();
 
@@ -18,29 +23,36 @@ class CarRacingServiceTest {
     public void start() throws Exception {
         // given
         List<String> carNameList = List.of("a", "b", "c");
-        int roundCount = 5;
+        int roundCount = 3;
         CarRacingRequestDto requestDto = new CarRacingRequestDto(carNameList, roundCount);
 
-        // when
-        CarRacingResponseDto responseDto = carRacingService.start(requestDto);
+        // when // then
+        Assertions.assertRandomNumberInRangeTest(
+                () -> {
+                    CarRacingResponseDto responseDto = carRacingService.start(requestDto);
+                    List<CarRacingResponseDto.RacingRecordDto> records = responseDto.racingRecordDtos();
 
-        // then - 결과는 무작위로 결정되기 때문에 정확한 결과를 테스트 하기 힘듦
-        List<CarRacingResponseDto.RacingRecordDto> racingRecordDtos = responseDto.racingRecordDtos();
+                    // 라운드별로 carPositions 검증
+                    assertThat(records).hasSize(roundCount);
 
-        assertThat(racingRecordDtos)
-                .hasSize(roundCount) // 라운드 수 = 기록 수
-                .extracting(CarRacingResponseDto.RacingRecordDto::carPositions)
-                .allSatisfy(carPositions -> {
-                    assertThat(carPositions)
-                            .hasSize(carNameList.size()) // 각 라운드에 모든 차의 위치가 기록됨
-                            .containsOnlyKeys(carNameList); // (key = 차 이름) 모든 차 이름이 일치하는지 검증
-                });
+                    assertThat(records.get(0).carPositions())
+                            .containsExactlyInAnyOrderEntriesOf(Map.of("a", 1, "b", 0, "c", 1));
 
+                    assertThat(records.get(1).carPositions())
+                            .containsExactlyInAnyOrderEntriesOf(Map.of("a", 2, "b", 1, "c", 2));
 
-        List<String> winners = responseDto.winners();
-        assertThat(winners)
-                .isNotEmpty() // 최소 한 명의 우승자가 존재
-                .allSatisfy(winner -> assertThat(carNameList).contains(winner)); // 모든 우승자가 유효한 차 이름
+                    assertThat(records.get(2).carPositions())
+                            .containsExactlyInAnyOrderEntriesOf(Map.of("a", 3, "b", 2, "c", 3));
+
+                    // 최종 우승자 검증
+                    List<String> winners = responseDto.winners();
+                    assertThat(winners)
+                            .containsExactlyInAnyOrder(carNameList.get(0), carNameList.get(2));
+                },
+                MOVING_FORWARD, STOP, MOVING_FORWARD,  // 1라운드
+                MOVING_FORWARD, MOVING_FORWARD, MOVING_FORWARD,  // 2라운드
+                MOVING_FORWARD, MOVING_FORWARD, MOVING_FORWARD   // 3라운드
+        );
     }
 
     @Test
