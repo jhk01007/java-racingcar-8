@@ -29,25 +29,7 @@ class RacingGameServiceTest {
         // when // then
         Assertions.assertRandomNumberInRangeTest(
                 () -> {
-                    RacingGameResponseDto responseDto = carRacingService.start(requestDto);
-                    List<RacingGameResponseDto.RacingRecordDto> records = responseDto.racingRecordDtos();
-
-                    // 라운드별로 carPositions 검증
-                    assertThat(records).hasSize(roundCount);
-
-                    assertThat(records.get(0).carPositions())
-                            .containsExactlyInAnyOrderEntriesOf(Map.of("a", 1, "b", 0, "c", 1));
-
-                    assertThat(records.get(1).carPositions())
-                            .containsExactlyInAnyOrderEntriesOf(Map.of("a", 2, "b", 1, "c", 2));
-
-                    assertThat(records.get(2).carPositions())
-                            .containsExactlyInAnyOrderEntriesOf(Map.of("a", 3, "b", 2, "c", 3));
-
-                    // 최종 우승자 검증
-                    List<String> winners = responseDto.winners();
-                    assertThat(winners)
-                            .containsExactlyInAnyOrder(carNameList.get(0), carNameList.get(2));
+                    assertRacingGame(requestDto, roundCount, carNameList);
                 },
                 MOVING_FORWARD, STOP, MOVING_FORWARD,  // 1라운드
                 MOVING_FORWARD, MOVING_FORWARD, MOVING_FORWARD,  // 2라운드
@@ -97,4 +79,26 @@ class RacingGameServiceTest {
                 .hasMessage("라운드는 최소 1개 이상이어야 합니다.");
     }
 
+
+    private void assertRacingGame(RacingGameRequestDto requestDto, int roundCount, List<String> carNameList) {
+        RacingGameResponseDto responseDto = carRacingService.start(requestDto);
+        List<RacingGameResponseDto.RacingRecordDto> records = responseDto.racingRecordDtos();
+
+        // 라운드별로 carPositions 검증
+        assertThat(records).hasSize(roundCount);
+
+        assertThat(records.get(0).carPositions())
+                .containsExactlyInAnyOrderEntriesOf(Map.of("a", 1, "b", 0, "c", 1));
+
+        assertThat(records.get(1).carPositions())
+                .containsExactlyInAnyOrderEntriesOf(Map.of("a", 2, "b", 1, "c", 2));
+
+        assertThat(records.get(2).carPositions())
+                .containsExactlyInAnyOrderEntriesOf(Map.of("a", 3, "b", 2, "c", 3));
+
+        // 최종 우승자 검증
+        List<String> winners = responseDto.winners();
+        assertThat(winners)
+                .containsExactlyInAnyOrder(carNameList.get(0), carNameList.get(2));
+    }
 }
