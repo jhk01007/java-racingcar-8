@@ -23,7 +23,7 @@ public class RacingRecord {
         return new RacingRecord(carPositions);
     }
 
-    public List<String> getTopCarName() {
+    public List<String> getTopCarNames() {
         // 가장 큰 position(우승 거리)를 구함
         int maxPosition = carPositions.values().stream()
                 .mapToInt(Integer::intValue)

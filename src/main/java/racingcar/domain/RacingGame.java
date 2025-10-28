@@ -65,6 +65,6 @@ public class RacingGame {
 
     private void processRaceResult() {
         RacingRecord racingResult = racingRecords.getLast();
-        winners.addAll(racingResult.getTopCarName());
+        winners.addAll(racingResult.getTopCarNames());
     }
 }
