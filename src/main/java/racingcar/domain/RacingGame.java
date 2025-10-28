@@ -21,7 +21,7 @@ public class RacingGame {
     public static RacingGame create(List<RacingCar> racingCars, int roundCount) {
         validateCarListSize(racingCars);
         validateCarNameDuplicate(racingCars);
-        validateRoundCount(roundCount);
+        validateRoundCountIsBiggerThanZero(roundCount);
         return new RacingGame(racingCars, new ArrayList<>(), new ArrayList<>(), roundCount);
     }
 

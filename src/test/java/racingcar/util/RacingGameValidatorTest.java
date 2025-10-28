@@ -73,13 +73,25 @@ class RacingGameValidatorTest {
         int negative = -3;
 
         // expect
-        assertThatThrownBy(() -> CarRacingValidator.validateRoundCount(zero))
+        assertThatThrownBy(() -> CarRacingValidator.validateRoundCountIsBiggerThanZero(zero))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("라운드는 최소 1개 이상이어야 합니다.");
 
-        assertThatThrownBy(() -> CarRacingValidator.validateRoundCount(negative))
+        assertThatThrownBy(() -> CarRacingValidator.validateRoundCountIsBiggerThanZero(negative))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("라운드는 최소 1개 이상이어야 합니다.");
+    }
+    
+    @Test
+    @DisplayName("라운드로 입력받은 숫자가 너무 크면 예외가 발생한다.")
+    public void validateRoundCountOverflow() throws Exception {
+        // given
+        String roundCount = "2147483648"; // int 범위는 2,147,483,647까지
+        
+        // when // then
+        assertThatThrownBy(() -> CarRacingValidator.validateRoundCountOverflow(roundCount))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("입력된 숫자가 너무 큽니다.");
     }
 
     // --- helper ---

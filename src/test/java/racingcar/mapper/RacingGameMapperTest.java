@@ -34,7 +34,7 @@ class RacingGameMapperTest {
 
     @Test
     @DisplayName("라운드 수가 숫자 형태가 아니면 에러가 발생한다.")
-    public void toRequestDto_fail() throws Exception {
+    public void toRequestDto_fail1() throws Exception {
         // given
         String carNameList = "pobi,woni,jun";
         String roundCount = "a";
@@ -43,6 +43,19 @@ class RacingGameMapperTest {
         assertThatThrownBy(() -> CarRacingMapper.toRequestDto(carNameList, roundCount))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("시도할 횟수로 숫자만 가능합니다.");
+    }
+
+    @Test
+    @DisplayName("라운드 수가 오버플로우가 나면 에러가 발생한다.")
+    public void toRequestDto_fail2() throws Exception {
+        // given
+        String carNameList = "pobi,woni,jun";
+        String roundCount = "2147483648";
+
+        // when // then
+        assertThatThrownBy(() -> CarRacingMapper.toRequestDto(carNameList, roundCount))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("입력된 숫자가 너무 큽니다.");
     }
 
     @Test

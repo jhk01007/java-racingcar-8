@@ -4,10 +4,14 @@ import racingcar.domain.RacingRecord;
 import racingcar.dto.RacingGameRequestDto;
 import racingcar.dto.RacingGameResponseDto;
 import racingcar.domain.Car;
+import racingcar.util.CarRacingValidator;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import static racingcar.util.CarRacingValidator.validateRoundCountIsNumber;
+import static racingcar.util.CarRacingValidator.validateRoundCountOverflow;
 
 /**
  * 자동차 경주에 관해서 객체 매핑을 담당하는 클래스
@@ -77,13 +81,11 @@ public class CarRacingMapper {
                 .toList();
     }
 
-    private static int mapRoundCount(String raceCount) {
-        int mappedRoundCount;
-        try {
-            mappedRoundCount = Integer.parseInt(raceCount);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("시도할 횟수로 숫자만 가능합니다.");
-        }
-        return mappedRoundCount;
+    private static int mapRoundCount(String roundCount) {
+
+        validateRoundCountOverflow(roundCount); // 오버플로우 검증
+        validateRoundCountIsNumber(roundCount); // 문자가 아닌 숫자인지 검증
+
+        return Integer.parseInt(roundCount);
     }
 }
